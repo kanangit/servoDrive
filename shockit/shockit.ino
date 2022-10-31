@@ -6,14 +6,14 @@ scukko
 
 #include "StepperK.h"
 
-const int stepsPerRevolution = 200; // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 100; // change this to fit the number of steps per revolution
 // for your motor
 
 // initialize the StepperK library:
-StepperK myStepper(stepsPerRevolution, 9, 8, 10, 11, 12);
+StepperK myStepper(stepsPerRevolution, 25, 29, 51, 47, 12);
 
 // define the trigger pin
-const int trigPin = 7;
+const int trigPin = 33;
 
 int steps_travel = stepsPerRevolution * 28;
 
