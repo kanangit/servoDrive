@@ -13,9 +13,9 @@ StepperK::StepperK(int number_of_steps, int pin_PU, int pin_DR,
   this->direction = 0;                     // motor direction
   this->last_step_time = 0;                // timestamp in us of the last step taken
   this->number_of_steps = number_of_steps; // total number of steps for this motor
-  this->steps_per_rev = steps_per_rev;     // steps per revolution (should coinside )
-                                           // with the external motor settings
-  this->steps_to_accelerate = 50;
+  this->steps_per_rev = steps_per_rev; // steps per revolution (should coinside )
+                                      // with the external motor settings
+  this ->steps_to_accelerate = 50; 
 
   // Arduino pins for the motor control connection:
   this->pin_PU = pin_PU;
@@ -52,12 +52,12 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
 {
   double currentDeltaT, acceleration, deltaPhi, deltaTfinal;
 
-  // the angle the motor turns per one step:
+  //the angle the motor turns per one step:
   deltaPhi = 2.0 * M_PI / double(this->steps_per_rev);
-  // the time delay between steps after the motor finishes
-  // the acceleration stage:
-  deltaTfinal = sqrt(deltaPhi / (2.0 * M_PI * finSpeed / 60.0));
-  // acceleration
+  //the time delay between steps after the motor finishes
+  //the acceleration stage:
+  deltaTfinal = deltaPhi / (60.0 * 2.0 * M_PI * finSpeed);
+  //acceleration
   acceleration = deltaTfinal / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
   for (int i = 0; i < no_steps_acc; i++)
   {
@@ -67,6 +67,8 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   {
     this->arr_delays[i] = round(1000000.0 * deltaTfinal);
   }
+  
+  
 }
 
 void StepperK::accel_and_jog(int steps_to_move)
@@ -83,19 +85,16 @@ void StepperK::accel_and_jog(int steps_to_move)
   {
     this->direction = 0;
   }
-  int i_delay = 0;
-  unsigned long step_v_delay = 500000L;
+
   // decrement the number of steps, moving one step each time:
   while (steps_left > 0)
   {
     unsigned long now = micros();
-    step_v_delay = arr_delays[i_delay];
     // move only if the appropriate delay has passed:
-    if (now - this->last_step_time >= step_v_delay)
+    if (now - this->last_step_time >= this->step_delay)
     {
       // get the timeStamp of when you stepped:
       this->last_step_time = now;
-      Serial.println(step_v_delay);
       // increment or decrement the step number,
       // depending on direction:
       if (this->direction == 1)
@@ -116,17 +115,13 @@ void StepperK::accel_and_jog(int steps_to_move)
       }
       // decrement the steps left:
       steps_left--;
-      // next delay time from the array:
-      if (i_delay < (ARRMAXLENGTH - 1))
-      {
-        i_delay++;
-      }
-
       // tell the driver to make one step:
       stepController(direction);
     }
   }
 }
+
+
 
 /*
  * Moves the motor steps_to_move steps.  If the number is negative,

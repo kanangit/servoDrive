@@ -56,7 +56,7 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   deltaPhi = 2.0 * M_PI / double(this->steps_per_rev);
   // the time delay between steps after the motor finishes
   // the acceleration stage:
-  deltaTfinal = sqrt(deltaPhi / (2.0 * M_PI * finSpeed / 60.0));
+  deltaTfinal = deltaPhi / (60.0 * 2.0 * M_PI * finSpeed);
   // acceleration
   acceleration = deltaTfinal / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
   for (int i = 0; i < no_steps_acc; i++)
@@ -84,7 +84,7 @@ void StepperK::accel_and_jog(int steps_to_move)
     this->direction = 0;
   }
   int i_delay = 0;
-  unsigned long step_v_delay = 500000L;
+  unsigned long step_v_delay = 0;
   // decrement the number of steps, moving one step each time:
   while (steps_left > 0)
   {
@@ -95,7 +95,6 @@ void StepperK::accel_and_jog(int steps_to_move)
     {
       // get the timeStamp of when you stepped:
       this->last_step_time = now;
-      Serial.println(step_v_delay);
       // increment or decrement the step number,
       // depending on direction:
       if (this->direction == 1)

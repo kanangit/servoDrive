@@ -56,7 +56,7 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   deltaPhi = 2.0 * M_PI / double(this->steps_per_rev);
   // the time delay between steps after the motor finishes
   // the acceleration stage:
-  deltaTfinal = sqrt(deltaPhi / (2.0 * M_PI * finSpeed / 60.0));
+  deltaTfinal = deltaPhi / (60.0 * 2.0 * M_PI * finSpeed);
   // acceleration
   acceleration = deltaTfinal / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
   for (int i = 0; i < no_steps_acc; i++)
