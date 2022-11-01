@@ -15,7 +15,7 @@ StepperK myStepper(stepsPerRevolution, 25, 29, 51, 47, 12, stepsPerRevolution);
 // define the trigger pin
 const int trigPin = 33;
 
-int steps_travel = stepsPerRevolution * 4;
+int steps_travel = stepsPerRevolution * 28;
 
 void setup()
 {
@@ -26,8 +26,8 @@ void setup()
 
   digitalWrite(12, HIGH);
 
-  // set the speed at xx rpm, with xxx steps to accelerate:
-  myStepper.setStepsToAccelerate(60, 100);
+  // set the speed at xx rpm:
+  myStepper.setSpeed(24);
   // initialize the serial port:
   Serial.begin(9600);
 }
@@ -44,6 +44,6 @@ void loop()
   // }
 
   Serial.println("counterclockwise");
-  myStepper.accel_and_jog(steps_travel);
-  delay(5000);
+  myStepper.step(steps_travel);
+  //delay(1);
 }
