@@ -34,13 +34,13 @@ class StepperK
 public:
   // constructors:
   StepperK(int number_of_steps, int pin_PU, int pin_DR,
-           int pin_LS_CW, int pin_LS_CCW, int pin_MF, int steps_per_rev);
+           int pin_LS_CW, int pin_LS_CCW, int pin_MF);
 
   // speed setter method:
   void setSpeed(long whatSpeed);
 
   // method to set the number of steps the motor accelerates:
-  void setStepsToAccelerate(long finSpeed, long no_steps_acc);
+  void setStepsToAccelerate(long no_steps);
 
   // mover method:
   void step(int number_of_steps);
@@ -55,11 +55,8 @@ private:
   // care of the step sequence
 
   int direction;            // Direction of rotation
-  unsigned long step_delay; // delay between steps, in us, based on speed 
-                            //(or terminal speed)
+  unsigned long step_delay; // delay between steps, in us, based on speed
   int number_of_steps;      // total number of steps this motor can take
-  int steps_per_rev; // steps per revolution (should coinside )
-                                      // with the external motor settings
   int steps_to_accelerate; // number of steps the motor accelerates.
                           //should be < number_of_steps; 
   int step_number;          // which step the motor is on

@@ -10,7 +10,7 @@ const int stepsPerRevolution = 100; // change this to fit the number of steps pe
 // for your motor
 
 // initialize the StepperK library:
-StepperK myStepper(stepsPerRevolution, 25, 29, 51, 47, 12, stepsPerRevolution);
+StepperK myStepper(stepsPerRevolution, 25, 29, 51, 47, 12);
 
 // define the trigger pin
 const int trigPin = 33;
