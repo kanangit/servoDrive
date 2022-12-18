@@ -4,8 +4,6 @@ shockit - Arduino code for moving the translation stage
 for the shock experiments
 
 last changes log:
-2022.12.18 Kananovich. (kananovicha@appstate.edu) Now the motor is starting when
-                        trigPin is HIGW
 2022.11.04 Kananovich. (kananovicha@appstate.edu)
  */
 
@@ -19,13 +17,13 @@ const int stepsPerRevolution = 100; // change this to fit the number of steps pe
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = -stepsPerRevolution *10;
+int steps_travel = - stepsPerRevolution *19;
 
-// speed in RPM: maximum limit is 3000
-int speed_rpm = 60;
+// speed in RPM:
+int speed_rpm = 120;
 
-// number of steps motor accelerates to the speed: don't go below 5
-int steps_to_accel = 100; // max acceleration 100 step corresponds to one revolution. 
+// number of steps motor accelerates to the speed:
+int steps_to_accel = 100;
 
 // initialize the StepperK library:
 StepperK myStepper(steps_travel, 25, 29, 51, 47, 12, stepsPerRevolution);
@@ -34,7 +32,7 @@ StepperK myStepper(steps_travel, 25, 29, 51, 47, 12, stepsPerRevolution);
 void setup()
 {
   // set up the trig pin:
-  pinMode(trigPin, INPUT);
+  pinMode(trigPin, INPUT_PULLUP);
 
   pinMode(12, OUTPUT); // for testing
   digitalWrite(12, HIGH);
@@ -49,11 +47,9 @@ void loop()
   // inject only if the trigger signal is received.
   //trigger signal is when the input on the BNC goes from 5 V to 0 V.
 
-   if (digitalRead(trigPin) == HIGH)
+   if (digitalRead(trigPin) == LOW)
    {
-     myStepper.accel_and_jog(-steps_travel);
-     // myStepper.setStepsToAccelerate(60, steps_to_accel);  // optional comment for enabling the forward and backward motion
-    // myStepper.accel_and_jog(steps_travel);         
+     myStepper.accel_and_jog(-steps_travel);     
    }
 
 }
