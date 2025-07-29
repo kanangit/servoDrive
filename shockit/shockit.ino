@@ -4,6 +4,7 @@ shockit - Arduino code for moving the translation stage
 for the shock experiments
 
 last changes log:
+2505.07.29 editing for acceleration
 2022.12.18 Kananovich. (kananovicha@appstate.edu) Now the motor is starting when
                         trigPin is HIGW
 2022.11.04 Kananovich. (kananovicha@appstate.edu)
