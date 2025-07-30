@@ -26,7 +26,7 @@
 // ensure this library description is only included once
 #ifndef ARRMAXLENGTH
 //#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
-#define ARRMAXLENGTH 120 // maximum size of the double precision array Arduino Mega
+#define ARRMAXLENGTH 350 // maximum size of the double precision array Arduino Mega
 // can handle
 #endif
 #ifndef StepperK_h
@@ -51,7 +51,7 @@ public:
   // the motor to accelerate from standstill, run a given number of steps
   // with a constant speed and then accelerate again for a certain number 
   // of steps
-  void setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_steps_acc, long no_steps_rectilin, long no_steps_acc2);
+  void setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long no_steps_rectilin, long alpha2, long no_steps_acc2);
 
   // mover method:
   void step(int number_of_steps);

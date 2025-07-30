@@ -49,7 +49,7 @@ void setup()
 
   // set the speed at speed_rpm rpm, with steps_to_accel steps to accelerate:
   //myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
-  myStepper.setStepsToAccelerateAgain(speed_rpm, 0.1, steps_to_accel, 100, 100);
+  myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, 100, 9.8, 100);
 
 
 }
