@@ -20,10 +20,10 @@ const int stepsPerRevolution = 100; // change this to fit the number of steps pe
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = -stepsPerRevolution *10;
+int steps_travel = -stepsPerRevolution *1;
 
 // speed in RPM: maximum limit is 3000
-int speed_rpm = 60;
+int speed_rpm = 6;
 
 // number of steps motor accelerates to the speed: don't go below 5
 int steps_to_accel = 100; // max acceleration 100 step corresponds to one revolution. 
@@ -34,6 +34,11 @@ StepperK myStepper(steps_travel, 25, 29, 51, 47, 12, stepsPerRevolution);
 
 void setup()
 {
+  
+  Serial.begin(9600);
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for native USB port only
+  }
   // set up the trig pin:
   pinMode(trigPin, INPUT);
 
@@ -42,6 +47,7 @@ void setup()
 
   // set the speed at speed_rpm rpm, with steps_to_accel steps to accelerate:
   myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
+
 
 }
 

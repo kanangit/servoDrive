@@ -62,10 +62,18 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   for (int i = 0; i < no_steps_acc; i++)
   {
     this->arr_delays[i] = round(1000000.0 * sqrt(deltaPhi / 2.0 / acceleration / double(i + 1)));
+    Serial.print(i);
+    Serial.print("  ");
+    Serial.print(arr_delays[i]);
+    Serial.println();
   }
   for (int i = no_steps_acc; i < ARRMAXLENGTH; i++)
   {
     this->arr_delays[i] = round(1000000.0 * deltaTfinal);
+    Serial.print(i);
+    Serial.print("  ");
+    Serial.print(arr_delays[i]);
+    Serial.println();
   }
 }
 
