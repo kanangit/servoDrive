@@ -42,8 +42,15 @@ public:
   // speed setter method:
   void setSpeed(long whatSpeed);
 
-  // method to set the number of steps the motor accelerates:
+  // method to set the array of delays for the motor to 
+  // accelerate and run with a constant speed:
   void setStepsToAccelerate(long finSpeed, long no_steps_acc);
+
+  // method to set the array of time delays for each step for
+  // the motor to accelerate from standstill, run a given number of steps
+  // with a constant speed and then accelerate again for a certain number 
+  // of steps
+  void setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_steps_acc, long no_steps_rectilin, long no_steps_acc2);
 
   // mover method:
   void step(int number_of_steps);

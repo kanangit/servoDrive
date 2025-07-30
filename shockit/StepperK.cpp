@@ -77,6 +77,44 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   }
 }
 
+
+/*
+ * Sets the number of steps motor takes to accelerate to the speed
+ */
+void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_steps_acc, long no_steps_rectilin, long no_steps_acc2)
+{
+  double currentDeltaT, acceleration, deltaPhi, deltaTfinal;
+  double prevTheta, prevOmega, nextTheta, nextOmega;
+  double thetaRectil;
+
+  // the angle the motor turns per one step:
+  deltaPhi = double(2.0 * M_PI / double(this->steps_per_rev));
+  // the time delay between steps after the motor finishes
+  // the first acceleration stage:
+  deltaTfinal = 60.0 / double(this->steps_per_rev) / double(finSpeed);
+  // total angle the motor will turn at the end of the first acceleration stage:
+  thetaRectil = double(no_steps_acc) * deltaPhi;
+  // acceleration
+  acceleration = deltaPhi / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
+  for (int i = 0; i < no_steps_acc; i++)
+  {
+    this->arr_delays[i] = round(1000000.0 * sqrt(deltaPhi / 2.0 / acceleration / double(i + 1)));
+    Serial.print(i);
+    Serial.print("  ");
+    Serial.print(arr_delays[i]);
+    Serial.println();
+  }
+  for (int i = no_steps_acc; i < ARRMAXLENGTH; i++)
+  {
+    this->arr_delays[i] = round(1000000.0 * deltaTfinal);
+    Serial.print(i);
+    Serial.print("  ");
+    Serial.print(arr_delays[i]);
+    Serial.println();
+  }
+}
+
+
 void StepperK::accel_and_jog(int steps_to_move)
 {
   int steps_left = abs(steps_to_move); // how many steps to take
