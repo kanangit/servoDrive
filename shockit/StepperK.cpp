@@ -84,25 +84,47 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
 void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_steps_acc, long no_steps_rectilin, long no_steps_acc2)
 {
   double currentDeltaT, acceleration, deltaPhi, deltaTfinal;
-  double prevTheta, prevOmega, nextTheta, nextOmega;
-  double thetaRectil;
+  double prevTheta, prevOmega, nextDeltaT, nextTheta, nextOmega;
+  double alpha1, omegaFinal1, thetaRectil;
 
   // the angle the motor turns per one step:
   deltaPhi = double(2.0 * M_PI / double(this->steps_per_rev));
-  // the time delay between steps after the motor finishes
-  // the first acceleration stage:
-  deltaTfinal = 60.0 / double(this->steps_per_rev) / double(finSpeed);
   // total angle the motor will turn at the end of the first acceleration stage:
   thetaRectil = double(no_steps_acc) * deltaPhi;
-  // acceleration
-  acceleration = deltaPhi / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
+  // the time delay between steps after the motor finishes
+  // the first acceleration stage:
+  deltaTfinal = double(60.0) / double(this->steps_per_rev) / double(finSpeed);
+  // angular velocity at the end of the first acceleration stage:
+  omegaFinal1 = double(2.0 * M_PI) / deltaTfinal;
+
+  // angular acceleration to accelerate from standstill to constant velocity
+  alpha1 = omegaFinal1 * omegaFinal1 / double(2.0) / thetaRectil;
+  //deleta variable acceleration later:
+  //acceleration = deltaPhi / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
+  prevTheta = 0;
+  prevOmega = 0;
   for (int i = 0; i < no_steps_acc; i++)
   {
-    this->arr_delays[i] = round(1000000.0 * sqrt(deltaPhi / 2.0 / acceleration / double(i + 1)));
+    nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha1 * deltaPhi);
+    nextDeltaT = (nextOmega - prevOmega) / alpha1;
+    nextTheta = prevTheta + deltaPhi;
+    this->arr_delays[i] = round(1000000.0 * nextDeltaT);
     Serial.print(i);
+
     Serial.print("  ");
+    Serial.print("nextOmega = ");
+    Serial.print(nextOmega);
+    Serial.print(" ");
+
+    Serial.print("  ");
+    Serial.print("nextTheta = ");
+    Serial.print(nextTheta);
+    Serial.print(" ");
+
     Serial.print(arr_delays[i]);
     Serial.println();
+    prevTheta = nextTheta;
+    prevOmega = nextOmega;
   }
   for (int i = no_steps_acc; i < ARRMAXLENGTH; i++)
   {
@@ -259,5 +281,5 @@ void StepperK::stepController(int dir)
 */
 int StepperK::version(void)
 {
-  return 18;
+  return 19;
 }
