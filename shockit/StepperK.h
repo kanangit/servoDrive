@@ -26,7 +26,7 @@
 // ensure this library description is only included once
 #ifndef ARRMAXLENGTH
 //#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
-#define ARRMAXLENGTH 350 // maximum size of the double precision array Arduino Mega
+#define ARRMAXLENGTH 450 // maximum size of the double precision array Arduino Mega
 // can handle
 #endif
 #ifndef StepperK_h
@@ -76,6 +76,8 @@ private:
   int step_number;          // which step the motor is on
   int pin_count;
   unsigned long arr_delays[ARRMAXLENGTH];
+  double lead;              //the linear distance (in meters) the translation stage travels in one revolution of the screw
+                            //(corresponding to one revolution of the motor shaft.
 
   // motor pin numbers:
   int pin_PU;

@@ -9,6 +9,8 @@
 StepperK::StepperK(int number_of_steps, int pin_PU, int pin_DR,
                    int pin_LS_CW, int pin_LS_CCW, int pin_MF, int steps_per_rev)
 {
+
+  this->lead = 0.010;                      //lead of the translation stage lead screw
   this->step_number = 0;                   // which step the motor is on
   this->direction = 0;                     // motor direction
   this->last_step_time = 0;                // timestamp in us of the last step taken
@@ -87,6 +89,9 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long 
   double prevTheta, prevOmega, nextDeltaT, nextTheta, nextOmega;
   double alpha1, omegaFinal1, thetaRectil;
   double nextThetaTheor;
+  double alpha_break;
+
+  alpha_break = -20.0 / lead / M_PI;
 
   // the angle the motor turns per one step:
   deltaPhi = double(2.0 * M_PI / double(this->steps_per_rev));
@@ -191,11 +196,60 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
   Serial.println("--------------------------------------");
   for (int i = (no_steps_rectilin + no_steps_acc); i < (no_steps_rectilin + no_steps_acc + no_steps_acc2); i++)
   {
-    nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha1 * deltaPhi);
-    nextDeltaT = (nextOmega - prevOmega) / alpha1;
+    nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha2 * deltaPhi);
+    nextDeltaT = (nextOmega - prevOmega) / alpha2;
     nextTheta = prevTheta + deltaPhi;
 
-nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * nextDeltaT / 2.0;
+nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * nextDeltaT / 2.0;
+    
+    this->arr_delays[i] = round(1000000.0 * nextDeltaT);
+    Serial.print(i);
+
+    Serial.print("  ");
+    Serial.print("nextOmega = ");
+    Serial.print(nextOmega);
+    Serial.print(" ");
+
+    Serial.print("  ");
+    Serial.print("nextTheta = ");
+    Serial.print(nextTheta);
+    Serial.print(" ");
+
+    Serial.print("  ");
+    Serial.print("nextThetaTheor = ");
+    Serial.print(nextThetaTheor);
+    Serial.print(" ");
+
+    Serial.print(arr_delays[i]);
+    Serial.println();
+    prevTheta = nextTheta;
+    prevOmega = nextOmega;
+  }
+
+    Serial.println("breaking start");
+  Serial.println("--------------------------------------");
+  for (int i = (no_steps_rectilin + no_steps_acc + no_steps_acc2); i < (no_steps_rectilin + no_steps_acc + no_steps_acc2 +100); i++)
+  {
+    nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha_break * deltaPhi);
+        if (nextOmega > 0) {
+      nextDeltaT = (nextOmega - prevOmega) / alpha_break;
+      //Serial.println(nextOmega);
+    }
+    if (prevOmega * prevOmega <= - double(2.0) * alpha_break * deltaPhi) {
+      nextOmega = prevOmega/2 ;
+      nextDeltaT = (this->arr_delays[i - 1]) * 2.0 / 1000000.0;
+      Serial.println(nextOmega);
+    }
+      if (nextOmega <= 0) {
+      nextDeltaT = 100000.0;
+      nextOmega = 2.0 * M_PI / nextDeltaT;
+        //Serial.println(nextOmega);
+    }
+
+
+    nextTheta = prevTheta + deltaPhi;
+
+nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
     Serial.print(i);
@@ -367,5 +421,5 @@ void StepperK::stepController(int dir)
 */
 int StepperK::version(void)
 {
-  return 19;
+  return 20;
 }

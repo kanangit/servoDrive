@@ -11,6 +11,7 @@ last changes log:
  */
 
 #include "StepperK.h"
+#include <math.h>
 
 int trigPinValue;
 
@@ -22,13 +23,18 @@ const int stepsPerRevolution = 100; // change this to fit the number of steps pe
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = stepsPerRevolution *1;
+int steps_travel = stepsPerRevolution *2.5;
 
 // speed in RPM: maximum limit is 3000
 int speed_rpm = 60;
 
 // number of steps motor accelerates to the speed: don't go below 5
-int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolution. 
+int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolution.
+
+double acceleration2 = 10; // m/s^2 the acceleration of the moving piston as it hits the particles cloud
+
+double lead = 0.010;         //the linear distance (in meters) the translation stage travels in one revolution of the screw
+                            //(corresponding to one revolution of the motor shaft.
 
 // initialize the StepperK library:
 StepperK myStepper(steps_travel, 25, 29, 51, 47, 12, stepsPerRevolution);
@@ -49,7 +55,7 @@ void setup()
 
   // set the speed at speed_rpm rpm, with steps_to_accel steps to accelerate:
   //myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
-  myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, 100, 9.8, 100);
+  myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, 100, acceleration2 / lead / 2.0 / M_PI, 100);
 
 
 }
