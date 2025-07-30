@@ -25,7 +25,8 @@
 
 // ensure this library description is only included once
 #ifndef ARRMAXLENGTH
-#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
+//#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
+#define ARRMAXLENGTH 120 // maximum size of the double precision array Arduino Mega
 // can handle
 #endif
 #ifndef StepperK_h

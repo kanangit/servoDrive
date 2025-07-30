@@ -12,6 +12,8 @@ last changes log:
 
 #include "StepperK.h"
 
+int trigPinValue;
+
 // define the trigger pin
 const int trigPin = 33;
 
@@ -20,13 +22,13 @@ const int stepsPerRevolution = 100; // change this to fit the number of steps pe
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = -stepsPerRevolution *1;
+int steps_travel = stepsPerRevolution *1;
 
 // speed in RPM: maximum limit is 3000
-int speed_rpm = 6;
+int speed_rpm = 60;
 
 // number of steps motor accelerates to the speed: don't go below 5
-int steps_to_accel = 100; // max acceleration 100 step corresponds to one revolution. 
+int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolution. 
 
 // initialize the StepperK library:
 StepperK myStepper(steps_travel, 25, 29, 51, 47, 12, stepsPerRevolution);
@@ -56,12 +58,13 @@ void loop()
 {
   // inject only if the trigger signal is received.
   //trigger signal is when the input on the BNC goes from 5 V to 0 V.
-
-   if (digitalRead(trigPin) == HIGH)
+trigPinValue = digitalRead(trigPin);
+   if (trigPinValue == HIGH)
    {
+    Serial.println(trigPinValue);
      myStepper.accel_and_jog(-steps_travel);
      // myStepper.setStepsToAccelerate(60, steps_to_accel);  // optional comment for enabling the forward and backward motion
-    // myStepper.accel_and_jog(steps_travel);         
+    // myStepper.accel_and_jog(steps_travel);      
    }
 
 }

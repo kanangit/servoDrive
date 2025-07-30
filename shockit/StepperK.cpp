@@ -86,6 +86,7 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_s
   double currentDeltaT, acceleration, deltaPhi, deltaTfinal;
   double prevTheta, prevOmega, nextDeltaT, nextTheta, nextOmega;
   double alpha1, omegaFinal1, thetaRectil;
+  double nextThetaTheor;
 
   // the angle the motor turns per one step:
   deltaPhi = double(2.0 * M_PI / double(this->steps_per_rev));
@@ -94,13 +95,30 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_s
   // the time delay between steps after the motor finishes
   // the first acceleration stage:
   deltaTfinal = double(60.0) / double(this->steps_per_rev) / double(finSpeed);
+
+
+  
   // angular velocity at the end of the first acceleration stage:
-  omegaFinal1 = double(2.0 * M_PI) / deltaTfinal;
+  omegaFinal1 = double(2.0 * M_PI) / deltaTfinal / double(this->steps_per_rev);
 
   // angular acceleration to accelerate from standstill to constant velocity
   alpha1 = omegaFinal1 * omegaFinal1 / double(2.0) / thetaRectil;
   //deleta variable acceleration later:
   //acceleration = deltaPhi / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
+
+
+    Serial.print("  ");
+    Serial.print("deltaTfinal = ");
+    Serial.print(deltaTfinal);
+    Serial.print(" ");    
+    Serial.println("--------------------------------------- ");
+
+    Serial.print("  ");
+    Serial.print("omegaFinal1 = ");
+    Serial.print(omegaFinal1);
+    Serial.print(" ");    
+    Serial.println("--------------------------------------- ");
+  
   prevTheta = 0;
   prevOmega = 0;
   for (int i = 0; i < no_steps_acc; i++)
@@ -108,6 +126,9 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_s
     nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha1 * deltaPhi);
     nextDeltaT = (nextOmega - prevOmega) / alpha1;
     nextTheta = prevTheta + deltaPhi;
+
+nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * nextDeltaT / 2.0;
+    
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
     Serial.print(i);
 
@@ -119,6 +140,11 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long finAlpha, long no_s
     Serial.print("  ");
     Serial.print("nextTheta = ");
     Serial.print(nextTheta);
+    Serial.print(" ");
+
+    Serial.print("  ");
+    Serial.print("nextThetaTheor = ");
+    Serial.print(nextThetaTheor);
     Serial.print(" ");
 
     Serial.print(arr_delays[i]);
