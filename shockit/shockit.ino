@@ -13,17 +13,15 @@ last changes log:
 #include "StepperK.h"
 #include <math.h>
 
-int trigPinValue;
-
-// define the trigger pin
-const int trigPin = 33;
-
+//---------------------------------------------------------------------------------------------
 const int stepsPerRevolution = 100; // change this to fit the number of steps per revolution
-// for your motor (which is set up in MotionStudio.exe)
+// for your motor (which is set up in MotionStudio.exe). Usually don't have to change
+//----------------------------------------------------------------------------------------------
+
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = stepsPerRevolution *6;
+int steps_travel = -stepsPerRevolution *7;
 
 // speed in RPM: maximum limit is 3000
 int speed_rpm = 60;
@@ -34,9 +32,18 @@ int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolut
 int steps_rectilin = 50; // number of steps the piston moves with constant speed speed_rpm after the first aceeleration stage
                          // (and before the second acceleration stage
 
-double acceleration2 = 3; // m/s^2 the acceleration of the moving piston as it hits the particles cloud
+double acceleration2 = 1; // m/s^2 the acceleration of the moving piston as it hits the particles cloud
 
-int steps_to_accel_2 = 50; // number of steps the piston accelerates as it hits the particles 
+int steps_to_accel_2 = 200; // number of steps the piston accelerates as it hits the particles 
+
+
+
+//-------------------------------------------------------------------------------------------------
+//more permanent parameters (usually don't need to be changed):
+//-------------------------------------------------------------------------------------------------
+int trigPinValue;
+// define the trigger pin
+const int trigPin = 33;
 
 double lead = 0.010;         //the linear distance (in meters) the translation stage travels in one revolution of the screw
                             //(corresponding to one revolution of the motor shaft.
