@@ -159,14 +159,14 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
   }
   Serial.println("rectilinear motion start");
   Serial.println("--------------------------------------");
-  for (int i = no_steps_acc; i < (no_steps_rectilin + no_steps_acc); i++)
+  for (int i = no_steps_acc; i < (no_steps_acc + no_steps_rectilin); i++)
   {
     nextOmega = prevOmega;
     nextDeltaT = nextDeltaT;
     nextTheta = prevTheta + deltaPhi;
     nextThetaTheor = prevTheta + prevOmega * nextDeltaT;
     //this->arr_delays[i] = round(1000000.0 * deltaTfinal);
-    this->arr_delays[i] = round(1000000.0 * nextDeltaT);
+    this->arr_delays[i] = round(1000000.0 * nextDeltaT);//this has an error ???
     
    Serial.print(i);
 

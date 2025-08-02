@@ -25,9 +25,10 @@
 
 // ensure this library description is only included once
 #ifndef ARRMAXLENGTH
-//#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
-#define ARRMAXLENGTH 450 // maximum size of the double precision array Arduino Mega
-// can handle
+#define ARRMAXLENGTH 1200 // maximum size of the double precision array Arduino Mega
+//#define ARRMAXLENGTH 450 // maximum size of the double precision array Arduino Mega
+// can handle (this seemed to cause an issue where beyond i=400 + no_steps_acc which is 50, the stage would not move, this max length should
+// be more than the travel length of the stage which on 8/1/2025 is near 14 cm or 1400 array size, therefore Evan changed the size from 1200 to 1500
 #endif
 #ifndef StepperK_h
 #define StepperK_h

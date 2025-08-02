@@ -14,27 +14,28 @@ last changes log:
 #include <math.h>
 
 //---------------------------------------------------------------------------------------------
-const int stepsPerRevolution = 100; // change this to fit the number of steps per revolution
+const int stepsPerRevolution = 50; // change this to fit the number of steps per revolution
 // for your motor (which is set up in MotionStudio.exe). Usually don't have to change
 //----------------------------------------------------------------------------------------------
 
 
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
-int steps_travel = -stepsPerRevolution *7;
+// each step is 0.1 mm travel
+int steps_travel = stepsPerRevolution *1;
 
 // speed in RPM: maximum limit is 3000
-int speed_rpm = 60;
+int speed_rpm = 200;
 
 // number of steps motor accelerates to the speed: don't go below 5
 int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolution.
 
-int steps_rectilin = 50; // number of steps the piston moves with constant speed speed_rpm after the first aceeleration stage
+int steps_rectilin = 250; // number of steps the piston moves with constant speed speed_rpm after the first aceeleration stage
                          // (and before the second acceleration stage
 
-double acceleration2 = 1; // m/s^2 the acceleration of the moving piston as it hits the particles cloud
+double acceleration2 = 6.0; // m/s^2 the acceleration of the moving piston as it hits the particles cloud
 
-int steps_to_accel_2 = 200; // number of steps the piston accelerates as it hits the particles 
+int steps_to_accel_2 = 250; // number of steps the piston accelerates as it hits the particles 
 
 
 
@@ -66,9 +67,8 @@ void setup()
   digitalWrite(12, HIGH);
 
   // set the speed at speed_rpm rpm, with steps_to_accel steps to accelerate:
-  //myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
-  myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, steps_to_accel, acceleration2 / lead / 2.0 / M_PI, steps_to_accel_2);
-
+  myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
+  //myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, steps_rectilin, acceleration2 / lead / 2.0 / M_PI, steps_to_accel_2);
 
 }
 

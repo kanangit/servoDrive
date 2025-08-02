@@ -1,0 +1,40 @@
+This is the description of the setting on how to run the motor for nonlinear wave experiment. 
+
+Few things to consider:
+1. This motor is quite fast and can be haradous if it can be operated correctly. However, the limit switch is to break the circuit and stop the motion of the motor. 
+2. We have setup the trigger using function generator which is already stored in the genearator. One should keep the operation procedure in mind before running the motor.
+
+For the safe operation, 
+1. First turn on the function generator and click the single so that it gets to trigger mode.
+2. Then turn on the motor by turning on the voltage converter switch.
+3. Now you set up your parameter to run the motor.
+
+The motor servo driver is located on the Desktop and is called "Motion Studio". The installation files are in the folder "\manuals\servo".
+
+In arduino parameter are as follows:
+
+const int stepsPerRevolution = 100; 
+
+Anton has setup the number of steps to complete one revolution is 100. --- Attention on 2025-08-01 the number of steps per revolution was set up at 50. ----- This way it will complete one revolution in 100 steps. He has setup the same thing in
+the driver setting in a same way. If you want to change the number of steps then chanage the setting in the driver and here. 
+
+int steps_travel = stepsPerRevolution *2;  
+
+This defines the travel distance in steps. One revolution corresponds to 10 mm (you can check the ball screw. It is rated). You can check that distance between two pitch is 10 mm
+The multiplication factor will define how many revolution it is travelling. For example, multiplication of 2 shows that it will travel two revolution. Positive number will move the 
+translation stage forward, and negative number define the negative direction.
+
+distance traveled =  int steps_travel = stepsPerRevolution *2 = 1 rev*2*10mm/rev = 20 mm.
+
+// speed in RPM: maximum limit is 3000 (rated). 
+// Ex: 1 rpm*10 mm/rev = 10 mm per minute or 10/60 mm/sec. since in one revolution it will travel 10 mm as per the ball screw. 
+
+int speed_rpm = 60; 
+
+Angular velocity in rev/sec will be 60 rpm/60 = 1 rev/sec 
+Velocity in mm/sec will be 60 rpm*10 mm/rev/60 = 10 mm/sec 
+
+
+int steps_to_accel = 100; // max acceleration 100 step corresponds to one revolution. I can change it to 50 for acceleration within 1/2 revolution. I can change to 25 to 
+to accelerate it within 1/4 of time.
+
