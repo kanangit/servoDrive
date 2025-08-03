@@ -64,18 +64,18 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   for (int i = 0; i < no_steps_acc; i++)
   {
     this->arr_delays[i] = round(1000000.0 * sqrt(deltaPhi / 2.0 / acceleration / double(i + 1)));
-    Serial.print(i);
-    Serial.print("  ");
-    Serial.print(arr_delays[i]);
-    Serial.println();
+//    Serial.print(i);
+//    Serial.print("  ");
+//    Serial.print(arr_delays[i]);
+//    Serial.println();
   }
   for (int i = no_steps_acc; i < ARRMAXLENGTH; i++)
   {
     this->arr_delays[i] = round(1000000.0 * deltaTfinal);
-    Serial.print(i);
-    Serial.print("  ");
-    Serial.print(arr_delays[i]);
-    Serial.println();
+//    Serial.print(i);
+//    Serial.print("  ");
+//    Serial.print(arr_delays[i]);
+//    Serial.println();
   }
 }
 
@@ -112,17 +112,17 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long 
   //acceleration = deltaPhi / 2.0 / double(no_steps_acc) / deltaTfinal / deltaTfinal;
 
 
-    Serial.print("  ");
-    Serial.print("deltaTfinal = ");
-    Serial.print(deltaTfinal);
-    Serial.print(" ");    
-    Serial.println("--------------------------------------- ");
+//    Serial.print("  ");
+//    Serial.print("deltaTfinal = ");
+//    Serial.print(deltaTfinal);
+//    Serial.print(" ");    
+//    Serial.println("--------------------------------------- ");
 
-    Serial.print("  ");
-    Serial.print("omegaFinal1 = ");
-    Serial.print(omegaFinal1);
-    Serial.print(" ");    
-    Serial.println("--------------------------------------- ");
+//    Serial.print("  ");
+//    Serial.print("omegaFinal1 = ");
+//    Serial.print(omegaFinal1);
+//    Serial.print(" ");    
+//    Serial.println("--------------------------------------- ");
   
   prevTheta = 0;
   prevOmega = 0;
@@ -135,30 +135,30 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long 
 nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
-    Serial.print(i);
+ //   Serial.print(i);
 
-    Serial.print("  ");
-    Serial.print("nextOmega = ");
-    Serial.print(nextOmega);
-    Serial.print(" ");
+ //   Serial.print("  ");
+ //   Serial.print("nextOmega = ");
+ //   Serial.print(nextOmega);
+ //   Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextTheta = ");
-    Serial.print(nextTheta);
-    Serial.print(" ");
+ //   Serial.print("  ");
+ //   Serial.print("nextTheta = ");
+ //   Serial.print(nextTheta);
+ //   Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextThetaTheor = ");
-    Serial.print(nextThetaTheor);
-    Serial.print(" ");
+ //   Serial.print("  ");
+ //   Serial.print("nextThetaTheor = ");
+ //   Serial.print(nextThetaTheor);
+ //   Serial.print(" ");
 
-    Serial.print(arr_delays[i]);
-    Serial.println();
+ //   Serial.print(arr_delays[i]);
+ //   Serial.println();
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }
-  Serial.println("rectilinear motion start");
-  Serial.println("--------------------------------------");
+ // Serial.println("rectilinear motion start");
+ // Serial.println("--------------------------------------");
   for (int i = no_steps_acc; i < (no_steps_acc + no_steps_rectilin); i++)
   {
     nextOmega = prevOmega;
@@ -168,32 +168,32 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
     //this->arr_delays[i] = round(1000000.0 * deltaTfinal);
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);//this has an error ???
     
-   Serial.print(i);
+//   Serial.print(i);
 
-    Serial.print("  ");
-    Serial.print("nextOmega = ");
-    Serial.print(nextOmega);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextOmega = ");
+//    Serial.print(nextOmega);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextTheta = ");
-    Serial.print(nextTheta);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextTheta = ");
+//    Serial.print(nextTheta);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextThetaTheor = ");
-    Serial.print(nextThetaTheor);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextThetaTheor = ");
+//    Serial.print(nextThetaTheor);
+//    Serial.print(" ");
 
-    Serial.print(arr_delays[i]);
-    Serial.println();
+//    Serial.print(arr_delays[i]);
+//    Serial.println();
     
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }
 
-   Serial.println("Second acceleration motion start");
-  Serial.println("--------------------------------------");
+//   Serial.println("Second acceleration motion start");
+//  Serial.println("--------------------------------------");
   for (int i = (no_steps_rectilin + no_steps_acc); i < (no_steps_rectilin + no_steps_acc + no_steps_acc2); i++)
   {
     nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha2 * deltaPhi);
@@ -203,31 +203,31 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
 nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
-    Serial.print(i);
+//    Serial.print(i);
 
-    Serial.print("  ");
-    Serial.print("nextOmega = ");
-    Serial.print(nextOmega);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextOmega = ");
+//    Serial.print(nextOmega);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextTheta = ");
-    Serial.print(nextTheta);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextTheta = ");
+//    Serial.print(nextTheta);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextThetaTheor = ");
-    Serial.print(nextThetaTheor);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextThetaTheor = ");
+//    Serial.print(nextThetaTheor);
+//    Serial.print(" ");
 
-    Serial.print(arr_delays[i]);
-    Serial.println();
+//    Serial.print(arr_delays[i]);
+//    Serial.println();
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }
 
-    Serial.println("breaking start");
-  Serial.println("--------------------------------------");
+//    Serial.println("breaking start");
+//  Serial.println("--------------------------------------");
   for (int i = (no_steps_rectilin + no_steps_acc + no_steps_acc2); i < (no_steps_rectilin + no_steps_acc + no_steps_acc2 +100); i++)
   {
     nextOmega = sqrt(prevOmega * prevOmega  + double(2.0) * alpha_break * deltaPhi);
@@ -252,25 +252,25 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * next
 nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
-    Serial.print(i);
+//    Serial.print(i);
 
-    Serial.print("  ");
-    Serial.print("nextOmega = ");
-    Serial.print(nextOmega);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextOmega = ");
+//    Serial.print(nextOmega);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextTheta = ");
-    Serial.print(nextTheta);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextTheta = ");
+//    Serial.print(nextTheta);
+//    Serial.print(" ");
 
-    Serial.print("  ");
-    Serial.print("nextThetaTheor = ");
-    Serial.print(nextThetaTheor);
-    Serial.print(" ");
+//    Serial.print("  ");
+//    Serial.print("nextThetaTheor = ");
+//    Serial.print(nextThetaTheor);
+//    Serial.print(" ");
 
-    Serial.print(arr_delays[i]);
-    Serial.println();
+//    Serial.print(arr_delays[i]);
+//    Serial.println();
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }

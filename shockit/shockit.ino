@@ -22,10 +22,10 @@ const int stepsPerRevolution = 50; // change this to fit the number of steps per
 // travel distance in steps. Positive number will move the translation stage forward,
 // negative - backward
 // each step is 0.1 mm travel
-int steps_travel = stepsPerRevolution *1;
+int steps_travel = stepsPerRevolution *2;
 
 // speed in RPM: maximum limit is 3000
-int speed_rpm = 200;
+int speed_rpm = 100;
 
 // number of steps motor accelerates to the speed: don't go below 5
 int steps_to_accel = 50; // max acceleration 100 step corresponds to one revolution.
