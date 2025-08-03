@@ -67,8 +67,8 @@ void setup()
   digitalWrite(12, HIGH);
 
   // set the speed at speed_rpm rpm, with steps_to_accel steps to accelerate:
-  myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
-  //myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, steps_rectilin, acceleration2 / lead / 2.0 / M_PI, steps_to_accel_2);
+  //myStepper.setStepsToAccelerate(speed_rpm, steps_to_accel);
+  myStepper.setStepsToAccelerateAgain(speed_rpm, steps_to_accel, steps_rectilin, acceleration2 / lead / 2.0 / M_PI, steps_to_accel_2);
 
 }
 

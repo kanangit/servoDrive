@@ -52,7 +52,7 @@ void StepperK::setSpeed(long whatSpeed)
  */
 void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
 {
-  double currentDeltaT, acceleration, deltaPhi, deltaTfinal;
+  double currentDeltaT, acceleration, deltaPhi, deltaTfinal, totalTime;
 
   // the angle the motor turns per one step:
   deltaPhi = 2.0 * M_PI / double(this->steps_per_rev);
@@ -64,6 +64,7 @@ void StepperK::setStepsToAccelerate(long finSpeed, long no_steps_acc)
   for (int i = 0; i < no_steps_acc; i++)
   {
     this->arr_delays[i] = round(1000000.0 * sqrt(deltaPhi / 2.0 / acceleration / double(i + 1)));
+   
 //    Serial.print(i);
 //    Serial.print("  ");
 //    Serial.print(arr_delays[i]);
@@ -90,6 +91,9 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long 
   double alpha1, omegaFinal1, thetaRectil;
   double nextThetaTheor;
   double alpha_break;
+  double totalTime;
+
+  totalTime = 0;
 
   alpha_break = -20.0 / lead / M_PI;
 
@@ -132,10 +136,11 @@ void StepperK::setStepsToAccelerateAgain(long finSpeed, long no_steps_acc, long 
     nextDeltaT = (nextOmega - prevOmega) / alpha1;
     nextTheta = prevTheta + deltaPhi;
 
-nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * nextDeltaT / 2.0;
+    nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
- //   Serial.print(i);
+    totalTime = totalTime + double(arr_delays[i]) / 1000000.0;
+    Serial.print(i);
 
  //   Serial.print("  ");
  //   Serial.print("nextOmega = ");
@@ -147,13 +152,17 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
  //   Serial.print(nextTheta);
  //   Serial.print(" ");
 
- //   Serial.print("  ");
- //   Serial.print("nextThetaTheor = ");
- //   Serial.print(nextThetaTheor);
- //   Serial.print(" ");
+    Serial.print("  ");
+    Serial.print("step delay = ");
+    Serial.print(arr_delays[i]);
+    Serial.print("   ");
 
- //   Serial.print(arr_delays[i]);
- //   Serial.println();
+
+      Serial.print("  ");
+      Serial.print("totalTime = ");
+      Serial.print(totalTime);
+      Serial.print(" ");
+      Serial.println();
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }
@@ -167,8 +176,9 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
     nextThetaTheor = prevTheta + prevOmega * nextDeltaT;
     //this->arr_delays[i] = round(1000000.0 * deltaTfinal);
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);//this has an error ???
+    totalTime = totalTime + double(arr_delays[i]) / 1000000.0;
     
-//   Serial.print(i);
+   Serial.print(i);
 
 //    Serial.print("  ");
 //    Serial.print("nextOmega = ");
@@ -180,13 +190,17 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
 //    Serial.print(nextTheta);
 //    Serial.print(" ");
 
-//    Serial.print("  ");
-//    Serial.print("nextThetaTheor = ");
-//    Serial.print(nextThetaTheor);
-//    Serial.print(" ");
+    Serial.print("  ");
+    Serial.print("step delay = ");
+    Serial.print(arr_delays[i]);
+    Serial.print("   ");
 
-//    Serial.print(arr_delays[i]);
-//    Serial.println();
+
+      Serial.print("  ");
+      Serial.print("totalTime = ");
+      Serial.print(totalTime);
+      Serial.print(" ");
+      Serial.println();
     
     prevTheta = nextTheta;
     prevOmega = nextOmega;
@@ -203,7 +217,8 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha1 * nextDeltaT * next
 nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * nextDeltaT / 2.0;
     
     this->arr_delays[i] = round(1000000.0 * nextDeltaT);
-//    Serial.print(i);
+    totalTime = totalTime + double(arr_delays[i]) / 1000000.0;
+    Serial.print(i);
 
 //    Serial.print("  ");
 //    Serial.print("nextOmega = ");
@@ -215,13 +230,17 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * next
 //    Serial.print(nextTheta);
 //    Serial.print(" ");
 
-//    Serial.print("  ");
-//    Serial.print("nextThetaTheor = ");
-//    Serial.print(nextThetaTheor);
-//    Serial.print(" ");
+    Serial.print("  ");
+    Serial.print("step delay = ");
+    Serial.print(arr_delays[i]);
+    Serial.print("   ");
 
-//    Serial.print(arr_delays[i]);
-//    Serial.println();
+
+      Serial.print("  ");
+      Serial.print("totalTime = ");
+      Serial.print(totalTime);
+      Serial.print(" ");
+      Serial.println();
     prevTheta = nextTheta;
     prevOmega = nextOmega;
   }
@@ -238,7 +257,7 @@ nextThetaTheor = prevTheta + prevOmega * nextDeltaT + alpha2 * nextDeltaT * next
     if (prevOmega * prevOmega <= - double(2.0) * alpha_break * deltaPhi) {
       nextOmega = prevOmega/2 ;
       nextDeltaT = (this->arr_delays[i - 1]) * 2.0 / 1000000.0;
-      Serial.println(nextOmega);
+      //Serial.println(nextOmega);
     }
       if (nextOmega <= 0) {
       nextDeltaT = 100000.0;
@@ -421,5 +440,5 @@ void StepperK::stepController(int dir)
 */
 int StepperK::version(void)
 {
-  return 20;
+  return 21;
 }
